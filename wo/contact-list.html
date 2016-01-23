@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.css" charset="utf-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.js" charset="utf-8"></script>
+    <title>Wö</title>
+    <style>
+      html, body {
+        height: auto;
+      }
+      .separated.segments {
+        margin-top: 2.8em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="ui inverted orange top fixed menu">
+      <a class="item">Lista de contactos</a>
+    </div>
+    <div class="ui separated segments">
+      <div class="ui segment">
+        Andrés Miranda
+      </div>
+      <div class="ui segment">
+        Carlos Miranda
+      </div>
+      <div class="ui segment">
+        Ariel Moya Sequeira
+      </div>
+    </div>
+    <script type="text/javascript">
+      $.ready(function() {
+        $('.ui.sticky').sticky({ context: '.ui.items' });
+      });
+    </script>
+  </body>
+</html>
