@@ -20,30 +20,30 @@
   </head>
   <body>
     <div class="ui inverted orange top fixed borderless menu">
-      <div class="item"><i class="ui arrow left icon"></i></div>
+      <div class="item" onclick="window.location = 'contact-list.html'"><i class="ui arrow left icon"></i></div>
       <div class="item">Ariel Moya Sequeira</div>
     </div>
     <main>
       <form class="ui form">
         <div class="field">
           <label><i class="ui marker icon"></i> Ubicación</label>
-          <input type="text" name="location" placeholder="e.g. Paraíso, Cartago">
+          <input type="text" name="location" placeholder="e.g. Paraíso, Cartago" value="Paraíso, Cartago">
         </div>
         <div class="field">
           <label><i class="ui suitcase icon"></i> Empresa</label>
-          <input type="text" name="company">
+          <input type="text" name="company" value="Wö Interactive">
         </div>
         <div class="field">
           <label><i class="ui phone icon"></i> Número de teléfono</label>
           <div class="ui action input">
-            <input type="tel" placeholder="e.g. 83389069">
+            <input type="tel" placeholder="e.g. 83389069" value="83389069">
             <a class="ui button" href="tel:83389069"><i class="ui phone icon"></i> Llamar</a>
           </div>
         </div>
         <div class="field">
           <label><i class="ui mail icon"></i> Correo electrónico</label>
           <div class="ui action input">
-            <input type="email">
+            <input type="email" value="ardamose123@gmail.com">
             <a class="ui button" href="mailto:ardamose123@gmail.com"><i class="ui mail icon"></i> Escribir</a>
           </div>
         </div>
@@ -52,9 +52,25 @@
     <div class="ui bottom fixed borderless menu">
       <div class="right menu">
         <div class="item">
-          <button class="ui green button"><i class="ui check icon"></i> Guardar cambios</button>
+          <button class="ui compact button" id="saveButton" onclick="saveChanges();" style="margin-right: 0.5em;"><i class="ui download icon"></i> Guardar</button>
+          <button class="ui green compact button" id="saveButton" onclick="saveChanges();"><i class="ui browser icon"></i> Ver tarjeta</button>
         </div>
       </div>
     </div>
+    <script type="text/javascript">
+      function saveChanges()
+      {
+        $('#saveButton').addClass('loading');
+        setTimeout(function() {
+          $('#saveButton').removeClass('loading').;
+        }, 1000);
+      }
+
+      $(function() {
+        $(input).on('change', function() {
+
+        });
+      });
+    </script>
   </body>
 </html>
