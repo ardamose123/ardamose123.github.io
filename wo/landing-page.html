@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.css" charset="utf-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.js" charset="utf-8"></script>
+    <title>Wö</title>
+    <style>
+      html, body {
+        height: auto;
+      }
+      main {
+      }
+
+      .ui.menu {
+        border-radius: 0;
+        margin-bottom: 0;
+      }
+
+      .action {
+        cursor: pointer;
+      }
+
+      img {
+        width: 7em;
+        height: 7em;
+      }
+
+      .action {
+        text-align: center;
+      }
+
+      @media screen and (orientation: portrait) {
+        .action {
+          margin-top: 9vh;
+          margin-bottom: 9vh;
+          display: block;
+        }
+      }
+
+      @media screen and (orientation: landscape) {
+        main {
+          margin-top: 25vh;
+        }
+
+        .action {
+          width: 33vw;
+          display: inline-block;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="ui inverted orange borderless menu">
+      <div class="item"><i class="sidebar icon"></i></div>
+      <div class="item">eSeeCard</div>
+    </div>
+    <main>
+      <div class="action">
+        <img src="my-card-icon.png" alt="" />
+        <div>Mis tarjetas</div>
+      </div>
+      <div class="action">
+        <img src="all-cards-icon.png" alt="" onclick="window.location = 'contact-list.html';"/>
+        <div>Mi tarjetero</div>
+      </div>
+      <div class="action">
+        <img src="all-cards-icon.png" alt="" onclick="window.location = 'contact-list.html';"/>
+        <div>Compartir mi tarjeta</div>
+      </div>
+    </main>
+  </body>
+</html>

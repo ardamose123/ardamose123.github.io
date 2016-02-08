@@ -26,26 +26,51 @@
     <main>
       <form class="ui form">
         <div class="field">
-          <label><i class="ui marker icon"></i> Ubicación</label>
+          <label><i class="user icon"></i> Nombre</label>
+          <input type="text" name="name" placeholder="Nombre" value="Ariel David Moya Sequeira">
+        </div>
+        <div class="field">
+          <label><i class="marker icon"></i> Ubicación</label>
           <input type="text" name="location" placeholder="e.g. Paraíso, Cartago" value="Paraíso, Cartago">
         </div>
         <div class="field">
-          <label><i class="ui suitcase icon"></i> Empresa</label>
-          <input type="text" name="company" value="Wö Interactive">
+          <label><i class="travel icon"></i> Puesto o rol</label>
+          <input type="text" name="position" value="Desarrollador de Software">
         </div>
         <div class="field">
-          <label><i class="ui phone icon"></i> Número de teléfono</label>
+          <label><i class="building icon"></i> Empresa</label>
+          <input type="text" name="company" value="eSeeCard Software">
+        </div>
+        <h4 class="ui orange horizontal divider header">Contacto</h4>
+        <div class="field">
+          <label><i class="phone icon"></i> Número de teléfono</label>
           <div class="ui action input">
             <input type="tel" placeholder="e.g. 83389069" value="83389069">
             <a class="ui button" href="tel:83389069"><i class="ui phone icon"></i> Llamar</a>
           </div>
         </div>
         <div class="field">
-          <label><i class="ui mail icon"></i> Correo electrónico</label>
+          <label><i class="mail icon"></i> Correo electrónico</label>
           <div class="ui action input">
             <input type="email" value="ardamose123@gmail.com">
             <a class="ui button" href="mailto:ardamose123@gmail.com"><i class="ui mail icon"></i> Escribir</a>
           </div>
+        </div>
+        <h4 class="ui orange horizontal divider header">Otros datos</h4>
+        <div class="field">
+          <label><i class="tags icon"></i> Categorías</label>
+          <div class="ui fluid multiple selection search dropdown">
+            <input type="hidden" name="categories">
+            <i class="dropdown icon"></i>
+            <div class="default text">Categorías&hellip;</div>
+            <div class="menu">
+              <div class="item" data-value="0001">Familia</div>
+              <div class="item" data-value="0002">Amigos</div>
+              <div class="item" data-value="0003">Negocios</div>
+              <div class="item" data-value="0004">Otros</div>
+            </div>
+          </div>
+          <small>¿No ves la categoría correcta en la lista? <a href="create-category.html">¡Crea una nueva!</a></small>
         </div>
       </form>
     </main>
@@ -53,7 +78,7 @@
       <div class="right menu">
         <div class="item">
           <button class="ui compact button" id="saveButton" onclick="saveChanges();" style="margin-right: 0.5em;"><i class="ui download icon"></i> Guardar</button>
-          <button class="ui green compact button" id="saveButton" onclick="saveChanges();"><i class="ui browser icon"></i> Ver tarjeta</button>
+          <button class="ui primary compact button" onclick="window.location = 'card-page.html;"><i class="ui browser icon"></i> Ver tarjeta</button>
         </div>
       </div>
     </div>
@@ -62,14 +87,12 @@
       {
         $('#saveButton').addClass('loading');
         setTimeout(function() {
-          $('#saveButton').removeClass('loading').;
+          $('#saveButton').removeClass('loading');
         }, 1000);
       }
 
       $(function() {
-        $(input).on('change', function() {
-
-        });
+        $('.ui.dropdown').dropdown();
       });
     </script>
   </body>
