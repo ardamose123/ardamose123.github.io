@@ -59,7 +59,7 @@
         <h4 class="ui orange horizontal divider header">Otros datos</h4>
         <div class="field">
           <label><i class="tags icon"></i> Categorías</label>
-          <div class="ui fluid multiple selection search dropdown">
+          <div id="categories" class="ui fluid multiple selection search dropdown">
             <input type="hidden" name="categories">
             <i class="dropdown icon"></i>
             <div class="default text">Categorías&hellip;</div>
@@ -74,7 +74,7 @@
         </div>
         <div class="field">
           <label><i class="hash icon"></i> Hashtags</label>
-          <div class="ui fluid multiple selection search dropdown">
+          <div id="hashtags" class="ui fluid multiple selection search dropdown">
             <input type="hidden" name="hashtags">
             <i class="dropdown icon"></i>
             <div class="default text">Hashtags&hellip;</div>
@@ -106,7 +106,10 @@
       }
 
       $(function() {
-        $('.ui.dropdown').dropdown();
+        $('#categories').dropdown();
+        $('#hashtags').dropdown({
+          allowAdditions: true
+        });
       });
     </script>
   </body>
