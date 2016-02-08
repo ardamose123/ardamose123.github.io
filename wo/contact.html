@@ -70,7 +70,6 @@
               <div class="item" data-value="0004">Otros</div>
             </div>
           </div>
-          <small>¿No ves la categoría correcta en la lista? <a href="create-category.html">¡Crea una nueva!</a></small>
         </div>
         <div class="field">
           <label><i class="hash icon"></i> Hashtags</label>
@@ -106,7 +105,9 @@
       }
 
       $(function() {
-        $('#categories').dropdown();
+        $('#categories').dropdown({
+          allowAdditions: true
+        });
         $('#hashtags').dropdown({
           allowAdditions: true
         });
