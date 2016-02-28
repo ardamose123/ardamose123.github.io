@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Challenge matching through a Telegram bot, by Ariel Moya</title>
+    <link rel="stylesheet" type="text/css" href="../css/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="../css/default.css" />
+  </head>
+  <body>
+    <aside>
+      <div class="vertical centered">
+        <div class="reader">
+          <h1>Challenge matching through a Telegram bot</h1>
+          <h2>An application of history, exponential decay and Bayesian probabilities</h2>
+          <div class="author">By <em>Ariel D. Moya Sequeira</em> on <em>January 28, 2016</em>.</div>
+        </div>
+      </div>
+    </aside>
+    <main>
+      <div class="reader">
+        <article>
+          <h1 id="telegram-and-table-tennis-challenges">Telegram and table tennis challenges</h1>
+<p>At my workplace, we may play table tennis during the day. For this, we have one table, some paddles and balls. We also use a Telegram bot as a match-maker… just for the fun of it. To make or answer challenges, the “workflow” goes as follows.</p>
+<ol style="list-style-type: decimal">
+<li>Player 1 wants to play and writes “ping” on a Telegram group chat for this purpose.</li>
+<li>The ping-pong bot asks for a challenger.</li>
+<li>Player 2 wants to play, too, and writes “pong”.</li>
+<li>The match between both players is announced by the bot.</li>
+</ol>
+<p>Until recently, we’ve played singles exclusively. However, since the advent of a couple more paddles in the office, we can play doubles, although match-making on doubles hasn’t been implemented. So, for now, we’ll focus on singles.</p>
+<h1 id="current-implementation">Current implementation</h1>
+<p>The program we use today is a PHP service, which is called by a Telegram webhook attached to a bot. The bot was invited to an off-topic Telegram group, so it can read the messages sent to the group. Also, a SQLite database is used to persist the bot’s state regarding the match-making.</p>
+<p>When a “ping” message is read by the bot, the database is truncated and the user who sent the message is stored. When a “pong” message arrives, the user who’s in the database is retrieved and the match between the players is announced. The database is cleaned afterwards.</p>
+<p>Although this works well enough actually, this has a number of drawbacks:</p>
+<ol style="list-style-type: decimal">
+<li>If users issue consecutive “ping” messages, only the last one in the sequence is remembered. The rest are forgotten, since the database is truncated every time a “Player 1” is recorded.</li>
+<li>If users issue consecutive “pong” messages, only the first one in the sequence is taken into account. Other users get an “error message” since there is no user recorded in the database after a “pong” has been successfully matched to a “ping”.</li>
+<li>If a “pong” message is issued as a response to a “ping” message with a delay of hours or days, the match will be announced. It’s more sensible to suppose that the original “ping” message has “timed out”, because Player 1 may be busy or out of the office.</li>
+</ol>
+<p>So, before tackling these drawbacks in an ad-hoc way, let’s look at the actual problem. This may allow us to come up with a more appropriate solution.</p>
+<h1 id="lets-not-forget-history">Let’s not forget history</h1>
+<p>I’ll first make an observation: we’re processing a <em>sequence</em> of challenges with the following properties:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Content.</strong> “ping” or “pong”. It could be a bit or a boolean value.</li>
+<li><strong>User ID.</strong> An identifier for the players. (e.g. Telegram username)</li>
+<li><strong>Date/time.</strong> A UNIX timestamp or ISO-8601 string.</li>
+</ol>
+<p>The current implementation obviates the date/time property; we’ll see it’s going to be very important later. Next, we need to know these three conditions hold in order to match two challengers:</p>
+<ol style="list-style-type: decimal">
+<li>The content of both challenges should make sense. (i.e. a “ping” is followed by a “pong” has most sense than the other three pairwise possibilities)</li>
+<li>The users can or want to play against each other. After all, one cannot play against oneself.</li>
+<li>The challenges should be close in time.</li>
+</ol>
+<p>In a more algebraic presentation:</p>
+<p><span class="math display">\[C_1 \text{ against } C_2 = (p_2 \text{ follows } p_1) \wedge (u_1 \text{ vs. } u_2) \wedge (t_2 \text{ close to } t_1)\]</span></p>
+<h1 id="a-problem-of-certainty">A problem of certainty</h1>
+<p>I proposed to use the Bayesian view of probability to solve the problem. Instead of looking at the conditions as a boolean proposition, we shall consider how <em>convinced</em> the machine may be that the proposition holds or not. Thus, the proposition above could be written as follows:</p>
+<p><span class="math display">\[\text{Pr}[C_1 \text{ against } C_2] = \text{Pr}[p_2 \text{ follows } p_1] \cdot \text{Pr}[u_1 \text{ vs. } u_2] \cdot \text{Pr}[t_2 \text{ close to } t_1]\]</span></p>
+<p>About the “follows” probability, any function that holds the following equation should suffice:</p>
+<p><span class="math display">\[\forall x,y\in\{\text{ping, pong}\} : \text{Pr}[\text{pong follows ping}] \geq \text{Pr}[x \text{ follows } y]\]</span></p>
+<p>For example, we can thus define:</p>
+<p><span class="math display">\[\text{Pr}[p_2 \text{ follows } p_1] = \begin{cases} 1.0 &amp; \text{if } p_1 = \mbox{ping} \wedge p_2 = \mbox{pong} \\ 0.5 &amp; \mbox{otherwise} \end{cases}\]</span></p>
+<p>About the “vs.” probability, it’s necessary that it outputs 0.0 when both users are the same. Apart from that, it may encode <em>preference</em> for players who’d want to play against each other. For now, let’s keep it simple in the following example:</p>
+<p><span class="math display">\[\text{Pr}[u_1 \text{ vs. } u_2] = \begin{cases} 0.0 &amp; \text{if } u_1 = u_2 \\ 1.0 &amp; \mbox{otherwise} \end{cases}\]</span></p>
+<h1 id="exponential-decay-of-history">Exponential decay of history</h1>
+<p>This section is based on <a href="https://awelonblue.wordpress.com/2012/08/20/exponential-decay-of-history/">the eponymous blog post by David Barbour</a>. You’d like to read it to learn about his insight on exponential decay of history and its potential applications.</p>
+<p>“Closeness” of two timed events can be modeled using any descending function. However, the idea of attaching a “half-life” to messages is appealing. In easier terms, the messages’ relevance is cut in half after fixed periods of time. The formula for half-life is:</p>
+<p><span class="math display">\[N(t) = N_0\cdot2^{-t/t_{1/2}}\]</span></p>
+<p>where <span class="math inline">\(N_t\)</span> is the value of <span class="math inline">\(N\)</span> at time <span class="math inline">\(t\)</span> and <span class="math inline">\(t_{1/2}\)</span> is the half-life (i.e. the period of time in which the value of <span class="math inline">\(N\)</span> decreases by half).</p>
+<p>Thus, if we use maximum probability (i.e. 1.0) for <span class="math inline">\(N_0\)</span>, we may define:</p>
+<p><span class="math display">\[\text{Pr}[t_2 \text{ close to } t_1] = 1.0 \cdot 2^{-(t_2 - t_1) / t_{1/2}} = 2^\frac{t_1-t_2}{t_{1/2}}\]</span></p>
+<p>Before considering exponential decay, I explored other ad-hoc ideas, like using a linear function, other forms of inverse exponentials, and even logistic functions learned in AI courses. However, the exponential decay formula above is quite convenient as it is.</p>
+<h1 id="putting-everything-together">Putting everything together</h1>
+<p>Now that we have a way to compute the certainty about a match, we’ll focus on the bigger picture: the sequence of messages.</p>
+<p>When a new message <span class="math inline">\(n\)</span> arrives, we must determine which of the previous messages yields the highest probability (or certainty) when evaluated against <span class="math inline">\(n\)</span>. This can be written as follows:</p>
+<p><span class="math display">\[\mathrm{match}(n) = \underset{m}{\mathrm{arg\,max}} \text{ Pr}[m \text{ against } n]\]</span></p>
+<h1 id="effect-on-user-interaction">Effect on user interaction</h1>
+<p>Apart from solving the issues of the previous implementation, we can take advantage of the probabilities generated from the message processing. For instance, a different message may be shown depending on probability ranges for a new-found match. This is a richer way to interact with users, instead of the binary “Match / No match” messages we now have.</p>
+<p>This also has the side-effect of demonstrating how mathematics can actually help to create a more meaningful service (albeit a very silly one in this case) with minimum development effort.</p>
+<h1 id="to-do-list">To-do list</h1>
+<ul>
+<li>Upload a sample Haskell implementation as soon as I retrieve it from my other computer.</li>
+<li>Write its Spanish version.</li>
+</ul>
+<script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+        </article>
+        <footer>
+          <a href="../">This blog</a> is is powered by <a href="https://jaspervdj.be/hakyll/" target="_blank">Hakyll</a>.
+        </footer>
+      </div>
+    </main>
+  </body>
+</html>
