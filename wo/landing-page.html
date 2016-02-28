@@ -22,6 +22,11 @@
         display: flex;
       }
 
+      .vertical {
+        flex-grow: 1;
+        display: flex;
+      }
+
       .centering {
         flex-grow: 1;
         display: flex;
@@ -56,6 +61,10 @@
           flex-direction: row;
         }
 
+        .vertical {
+          align-items: center;
+        }
+
         img {
           height: 7em;
         }
@@ -68,18 +77,20 @@
       <div class="item">eSeeCard</div>
     </div>
     <main>
-      <div class="centering">
-        <div class="action">
-          <img src="mi_tarjeta_logo_002_color.png" alt="" />
-          <div>Mis tarjetas</div>
-        </div>
-        <div class="action">
-          <img src="mi_tarjetero_logo_002_color.png" alt="" onclick="window.location = 'contact-list.html';"/>
-          <div>Mi tarjetero</div>
-        </div>
-        <div class="action">
-          <img src="compartir_logo_001_color.png" alt="" onclick="window.location = 'share-cards.html';"/>
-          <div>Compartir mi tarjeta</div>
+      <div class="vertical">
+        <div class="centering">
+          <div class="action">
+            <img src="mi_tarjeta_logo_002_color.png" alt="" />
+            <div>Mis tarjetas</div>
+          </div>
+          <div class="action">
+            <img src="mi_tarjetero_logo_002_color.png" alt="" onclick="window.location = 'contact-list.html';"/>
+            <div>Mi tarjetero</div>
+          </div>
+          <div class="action">
+            <img src="compartir_logo_001_color.png" alt="" onclick="window.location = 'share-cards.html';"/>
+            <div>Compartir mi tarjeta</div>
+          </div>
         </div>
       </div>
     </main>
