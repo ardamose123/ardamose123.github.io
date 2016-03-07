@@ -20,7 +20,7 @@
   width: 100%;
   background: #FFFFFF;
   margin: 1em 0em;
-  border: 1px solid rgba(34, 36, 38, 0.15);
+  border: 1px solid #DEDDBB;
   box-shadow: none;
   border-radius: 0.28571429rem;
   text-align: left;
@@ -84,7 +84,7 @@
 }
 .ui.table tfoot th {
   cursor: auto;
-  border-top: 1px solid rgba(34, 36, 38, 0.15);
+  border-top: 1px solid #DEDDBB;
   background: #F9FAFB;
   text-align: inherit;
   color: rgba(0, 0, 0, 0.87);
@@ -216,8 +216,8 @@
   border-right: none;
 }
 .ui.structured.sortable.table thead th {
-  border-left: 1px solid rgba(34, 36, 38, 0.15);
-  border-right: 1px solid rgba(34, 36, 38, 0.15);
+  border-left: 1px solid #DEDDBB;
+  border-right: 1px solid #DEDDBB;
 }
 .ui.structured.basic.table th {
   border-left: none;
@@ -265,13 +265,13 @@
 
 /* Fix 2nd Column */
 .ui.definition.table thead:not(.full-width) th:nth-child(2) {
-  border-left: 1px solid rgba(34, 36, 38, 0.15);
+  border-left: 1px solid #DEDDBB;
 }
 .ui.definition.table tfoot:not(.full-width) th:nth-child(2) {
-  border-left: 1px solid rgba(34, 36, 38, 0.15);
+  border-left: 1px solid #DEDDBB;
 }
 .ui.definition.table td:nth-child(2) {
-  border-left: 1px solid rgba(34, 36, 38, 0.15);
+  border-left: 1px solid #DEDDBB;
 }
 
 
@@ -605,19 +605,19 @@
 
 /* Red */
 .ui.red.table {
-  border-top: 0.2em solid #DB2828;
+  border-top: 0.2em solid #782F37;
 }
 .ui.inverted.red.table {
-  background-color: #DB2828 !important;
+  background-color: #782F37 !important;
   color: #FFFFFF !important;
 }
 
 /* Orange */
 .ui.orange.table {
-  border-top: 0.2em solid #F2711C;
+  border-top: 0.2em solid #E89247;
 }
 .ui.inverted.orange.table {
-  background-color: #F2711C !important;
+  background-color: #E89247 !important;
   color: #FFFFFF !important;
 }
 
@@ -650,19 +650,19 @@
 
 /* Teal */
 .ui.teal.table {
-  border-top: 0.2em solid #00B5AD;
+  border-top: 0.2em solid #62BD91;
 }
 .ui.inverted.teal.table {
-  background-color: #00B5AD !important;
+  background-color: #62BD91 !important;
   color: #FFFFFF !important;
 }
 
 /* Blue */
 .ui.blue.table {
-  border-top: 0.2em solid #2185D0;
+  border-top: 0.2em solid #315354;
 }
 .ui.inverted.blue.table {
-  background-color: #2185D0 !important;
+  background-color: #315354 !important;
   color: #FFFFFF !important;
 }
 
@@ -695,10 +695,10 @@
 
 /* Brown */
 .ui.brown.table {
-  border-top: 0.2em solid #A5673F;
+  border-top: 0.2em solid #DEDDBB;
 }
 .ui.inverted.brown.table {
-  background-color: #A5673F !important;
+  background-color: #DEDDBB !important;
   color: #FFFFFF !important;
 }
 
@@ -848,7 +848,7 @@
 .ui.sortable.table thead th {
   cursor: pointer;
   white-space: nowrap;
-  border-left: 1px solid rgba(34, 36, 38, 0.15);
+  border-left: 1px solid #DEDDBB;
   color: rgba(0, 0, 0, 0.87);
 }
 .ui.sortable.table thead th:first-child {
@@ -972,7 +972,7 @@
 
 .ui.basic.table {
   background: transparent;
-  border: 1px solid rgba(34, 36, 38, 0.15);
+  border: 1px solid #DEDDBB;
   box-shadow: none;
 }
 .ui.basic.table thead,

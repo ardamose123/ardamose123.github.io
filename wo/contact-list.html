@@ -3,13 +3,13 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.css" charset="utf-8">
+    <link rel="stylesheet" href="semantic/dist/semantic.css" charset="utf-8">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.js" charset="utf-8"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.8/semantic.js" charset="utf-8"></script>
+    <script src="semantic/dist/semantic.js" charset="utf-8"></script>
     <title>Wö</title>
     <style>
-      html, body {
-        min-height: 100%;
+      html, body, .pusher {
+        min-height: 100vh;
       }
       .separated.segments {
         margin-top: 2.8em;
@@ -17,10 +17,6 @@
 
       .right.floated {
         float: right;
-      }
-
-      .trash.icon {
-        color: #db2828;
       }
     </style>
   </head>
@@ -55,7 +51,7 @@
       </div>
     </div>
     <div class="pusher">
-      <div class="ui inverted orange top fixed borderless menu">
+      <div class="ui inverted blue top fixed borderless menu">
         <div class="item" onclick="window.location = 'landing-page.html'"><i class="left arrow icon"></i></div>
         <div class="item">Lista de contactos</div>
         <div class="right menu">
@@ -65,25 +61,25 @@
       <div class="ui separated segments">
         <div class="ui clearing segment">
           <div class="right floated">
-            <i class="trash icon"></i>
+            <i class="red trash icon"></i>
           </div>
           Andrés Miranda
         </div>
         <div class="ui clearing segment" onclick="window.location = 'contact.html';">
           <div class="right floated">
-            <i class="trash icon"></i>
+            <i class="red trash icon"></i>
           </div>
           Ariel Moya Sequeira
         </div>
         <div class="ui clearing segment">
           <div class="right floated">
-            <i class="trash icon"></i>
+            <i class="red trash icon"></i>
           </div>
           Carlos Miranda
         </div>
         <div class="ui clearing segment">
           <div class="right floated">
-            <i class="trash icon"></i>
+            <i class="red trash icon"></i>
           </div>
           Sofía Miranda
         </div>
