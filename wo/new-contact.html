@@ -19,7 +19,7 @@
       }
     </style>
     <script type="text/javascript">
-      function saveContact()
+      function createContact()
       {
         $('#saveButton').addClass('loading');
 
@@ -30,19 +30,18 @@
           return categories;
         });
 
-        updateContact({
-          id         : $('#contact-id').val(),
-          name       : $('#name'      ).val(),
-          location   : $('#location'  ).val(),
-          position   : $('#position'  ).val(),
-          company    : $('#company'   ).val(),
-          phone      : $('#phone'     ).val(),
-          email      : $('#email'     ).val(),
+        addContact({
+          name       : $('#name'    ).val(),
+          location   : $('#location').val(),
+          position   : $('#position').val(),
+          company    : $('#company' ).val(),
+          phone      : $('#phone'   ).val(),
+          email      : $('#email'   ).val(),
           categories : $('#categories').dropdown('get value')
         });
 
-        $('#contact-title').html($('#name').val());
         $('#saveButton').removeClass('loading');
+        window.location = 'contact.html?type=contact&key=' + $('#name').val();
       }
 
       var dropdownOptions = {
@@ -57,33 +56,18 @@
       };
 
       $(document).ready(function() {
-        var contact = listContacts()[getURLParameter('key')];
-
-        $('#contact-id').val(contact.id      );
-        $('#name'      ).val(contact.name    );
-        $('#location'  ).val(contact.location);
-        $('#position'  ).val(contact.position);
-        $('#company'   ).val(contact.company );
-        $('#phone'     ).val(contact.phone   );
-        $('#email'     ).val(contact.email   );
-        $('#contact-title').html(contact.name);
-
-        $('#categories').dropdown(dropdownOptions);
-        $('#hashtags'  ).dropdown(dropdownOptions);
-
-        $('#categories').dropdown('set value', contact.categories);
+        $('#hashtags').dropdown(dropdownOptions);
       });
     </script>
   </head>
   <body>
     <div class="ui inverted blue top fixed borderless menu">
       <div class="item" onclick="window.location = 'contact-list.html'"><i class="ui arrow left icon"></i></div>
-      <div class="item" id="contact-title"></div>
+      <div class="item">Nuevo contacto</div>
     </div>
     <main>
       <form class="ui form">
-        <input type="hidden" id="contact-id">
-        <div class="field">
+        <div class="required field">
           <label><i class="user icon"></i> Nombre</label>
           <input type="text" id="name" placeholder="Nombre">
         </div>
@@ -131,20 +115,9 @@
     <div class="ui bottom fixed borderless menu">
       <div class="right menu">
         <div class="item">
-          <button class="ui compact button" id="saveButton" onclick="saveContact();" style="margin-right: 0.5em;"><i class="ui download icon"></i> Guardar</button>
-          <button class="ui primary compact button" onclick="window.location = 'card-page.html;"><i class="ui browser icon"></i> Ver tarjeta</button>
+          <button class="ui primary compact button" id="saveButton" onclick="createContact();" style="margin-right: 0.5em;"><i class="ui check icon"></i> Registrar contacto</button>
         </div>
       </div>
     </div>
-    <script type="text/javascript">
-      $(function() {
-        $('#categories').dropdown({
-          allowAdditions: true
-        });
-        $('#hashtags').dropdown({
-          allowAdditions: true
-        });
-      });
-    </script>
   </body>
 </html>

@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="semantic/dist/semantic.css" charset="utf-8">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.js" charset="utf-8"></script>
     <script src="semantic/dist/semantic.js" charset="utf-8"></script>
+    <script src="js/eseecard.js" charset="utf-8"></script>
     <title>Wö</title>
     <style>
       html, body, .pusher {
@@ -55,37 +56,11 @@
         <div class="item" onclick="window.location = 'landing-page.html'"><i class="left arrow icon"></i></div>
         <div class="item">Lista de contactos</div>
         <div class="right menu">
+          <div class="item" onclick="window.location = 'new-contact.html'"><i class="add icon"></i></div>
           <div class="item" onclick="showFilteringSidebar();"><i class="filter icon"></i></div>
         </div>
       </div>
-      <div class="ui separated segments">
-        <div class="ui clearing segment">
-          <div class="right floated">
-            <i class="red trash icon"></i>
-          </div>
-          Andrés Miranda
-        </div>
-        <div class="ui clearing segment" onclick="window.location = 'contact.html';">
-          <div class="right floated">
-            <i class="red trash icon"></i>
-          </div>
-          Ariel Moya Sequeira
-        </div>
-        <div class="ui clearing segment">
-          <div class="right floated">
-            <i class="red trash icon"></i>
-          </div>
-          Carlos Miranda
-        </div>
-        <div class="ui clearing segment">
-          <div class="right floated">
-            <i class="red trash icon"></i>
-          </div>
-          Sofía Miranda
-        </div>
-        <div class="ui segment">
-          (Más gente&hellip;)
-        </div>
+      <div class="ui separated segments" id="contact-list">
       </div>
     </div>
     <div id="remove-contact-modal" class="ui basic modal">
@@ -96,7 +71,8 @@
       </div>
       <div class="content">
         <div class="description">
-          <p>¿Desea eliminar a &ldquo;Juan Pérez&rdquo; de sus contactos?</p>
+          <p>¿Desea eliminar a &ldquo;<span id="victim-name"></span>&rdquo; de sus contactos?</p>
+          <input type="hidden" id ="victim-id">
         </div>
       </div>
       <div class="actions">
@@ -105,7 +81,7 @@
             <i class="remove icon"></i>
             No
           </div>
-          <div class="ui green basic inverted button" onclick="$('#remove-contact-modal').modal('hide');">
+          <div class="ui green basic inverted button" onclick="removeContact()">
             <i class="checkmark icon"></i>
             Sí
           </div>
@@ -125,7 +101,15 @@
 
         $('#remove-contact-modal').modal();
 
-        $('.trash.icon').click(function() {
+        $('.trash.icon').click(function(event) {
+          event.preventDefault();
+          event.stopPropagation();
+
+          var contact = listContacts()[$(event.target).data('id')];
+
+          $('#victim-id').val(contact.id);
+          $('#victim-name').html(contact.name);
+
           $('#remove-contact-modal').modal('show');
           return false;
         });
@@ -140,6 +124,15 @@
         $('.ui.sidebar').sidebar('hide');
         return false;
       }
+
+      function removeContact()
+      {
+        deleteContact($('#victim-id').val());
+        $('#contact-list').html(renderContactList(listContacts()));
+        $('#remove-contact-modal').modal('hide');
+      }
+
+      $('#contact-list').html(renderContactList(listContacts()));
     </script>
   </body>
 </html>
