@@ -72,6 +72,19 @@
         $('#hashtags'  ).dropdown(dropdownOptions);
 
         $('#categories').dropdown('set value', contact.categories);
+
+        $('.ui.form').form({
+          fields: {
+            name : 'empty',
+            email: 'email'
+          },
+          prompt: {
+            empty : 'Escribe algo en este campo.',
+            email : 'Escribe una dirección de correo electrónico correcta.'
+          },
+          inline: true,
+          onSuccess: createContact
+        });
       });
     </script>
   </head>

@@ -57,6 +57,19 @@
 
       $(document).ready(function() {
         $('#hashtags').dropdown(dropdownOptions);
+
+        $('.ui.form').form({
+          fields: {
+            name : 'empty',
+            email: 'email'
+          },
+          prompt: {
+            empty : 'Escribe algo en este campo.',
+            email : 'Escribe una dirección de correo electrónico correcta.'
+          },
+          inline: true,
+          onSuccess: createContact
+        });
       });
     </script>
   </head>
@@ -115,7 +128,7 @@
     <div class="ui bottom fixed borderless menu">
       <div class="right menu">
         <div class="item">
-          <button class="ui primary compact button" id="saveButton" onclick="createContact();" style="margin-right: 0.5em;"><i class="ui check icon"></i> Registrar contacto</button>
+          <button class="ui primary compact button" id="saveButton" onclick="$('.ui.form').form('validate form');" style="margin-right: 0.5em;"><i class="ui check icon"></i> Registrar contacto</button>
         </div>
       </div>
     </div>

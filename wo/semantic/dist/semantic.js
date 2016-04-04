@@ -1660,7 +1660,7 @@ $.fn.form.settings = {
       var
         emailRegExp = new RegExp($.fn.form.settings.regExp.email, 'i')
       ;
-      return emailRegExp.test(value);
+      return '' === value || emailRegExp.test(value);
     },
 
     // value is most likely url
