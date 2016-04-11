@@ -17,6 +17,9 @@
         margin-bottom: 3.8em;
         padding: 1em;
       }
+      i.icon.hash:before {
+        content: "\f292";
+      }
     </style>
     <script type="text/javascript">
       function createContact()
@@ -30,6 +33,13 @@
           return categories;
         });
 
+        modifyHashtags(function(hashtags) {
+          $('#hashtags').dropdown('get value').split(',').forEach(function(hashtag) {
+            hashtags[hashtag] = { name : hashtag, id : hashtag };
+          });
+          return hashtags;
+        });
+
         addContact({
           name       : $('#name'    ).val(),
           location   : $('#location').val(),
@@ -37,7 +47,8 @@
           company    : $('#company' ).val(),
           phone      : $('#phone'   ).val(),
           email      : $('#email'   ).val(),
-          categories : $('#categories').dropdown('get value')
+          categories : $('#categories').dropdown('get value'),
+          hashtags   : $('#hashtags').dropdown('get value')
         });
 
         $('#saveButton').removeClass('loading');
@@ -54,6 +65,9 @@
           noResults     : 'No se encontró resultados de búsqueda.'
         }
       };
+
+      var hashtagOptions = dropdownOptions;
+      hashtagOptions.message.addResult = 'Crear hashtag <strong>{term}</strong>';
 
       $(document).ready(function() {
         $('#hashtags').dropdown(dropdownOptions);
@@ -115,13 +129,10 @@
         </div>
         <div class="field">
           <label><i class="hash icon"></i> Hashtags</label>
-          <div id="hashtags" class="ui fluid multiple selection search dropdown">
-            <input type="hidden" name="hashtags">
-            <i class="dropdown icon"></i>
-            <div class="default text">Hashtags&hellip;</div>
-            <div class="menu">
-            </div>
-          </div>
+          <script>
+            document.write(renderHashtagsDropdown('hashtags', 'hashtags'));
+            $('#hashtags').dropdown(hashtagOptions);
+          </script>
         </div>
       </form>
     </main>

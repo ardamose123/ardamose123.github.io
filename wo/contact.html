@@ -17,6 +17,9 @@
         margin-bottom: 3.8em;
         padding: 1em;
       }
+      i.icon.hash:before {
+        content: "\f292";
+      }
     </style>
     <script type="text/javascript">
       function saveContact()
@@ -30,6 +33,13 @@
           return categories;
         });
 
+        modifyHashtags(function(hashtags) {
+          $('#hashtags').dropdown('get value').split(',').forEach(function(hashtag) {
+            hashtags[hashtag] = { name : hashtag, id : hashtag };
+          });
+          return hashtags;
+        });
+
         updateContact({
           id         : $('#contact-id').val(),
           name       : $('#name'      ).val(),
@@ -38,7 +48,8 @@
           company    : $('#company'   ).val(),
           phone      : $('#phone'     ).val(),
           email      : $('#email'     ).val(),
-          categories : $('#categories').dropdown('get value')
+          categories : $('#categories').dropdown('get value'),
+          hashtags   : $('#hashtags').dropdown('get value')
         });
 
         $('#contact-title').html($('#name').val());
@@ -48,6 +59,7 @@
       var dropdownOptions = {
         allowAdditions: true,
         saveRemoteData: false,
+        direction: 'upward',
         message: {
           addResult     : 'Crear categoría <strong>{term}</strong>',
           count         : '{count} seleccionados',
@@ -55,6 +67,9 @@
           noResults     : 'No se encontró resultados de búsqueda.'
         }
       };
+
+      var hashtagOptions = dropdownOptions;
+      hashtagOptions.message.addResult = 'Crear hashtag <strong>{term}</strong>';
 
       $(document).ready(function() {
         var contact = listContacts()[getURLParameter('key')];
@@ -71,8 +86,6 @@
         $('#categories').dropdown(dropdownOptions);
         $('#hashtags'  ).dropdown(dropdownOptions);
 
-        $('#categories').dropdown('set value', contact.categories);
-
         $('.ui.form').form({
           fields: {
             name : 'empty',
@@ -83,8 +96,11 @@
             email : 'Escribe una dirección de correo electrónico correcta.'
           },
           inline: true,
-          onSuccess: createContact
+          onSuccess: saveContact
         });
+
+        $('#categories').dropdown('set selected', contact.categories.split(','));
+        $('#hashtags').dropdown('set selected', contact.hashtags.split(','));
       });
     </script>
   </head>
@@ -131,13 +147,10 @@
         </div>
         <div class="field">
           <label><i class="hash icon"></i> Hashtags</label>
-          <div id="hashtags" class="ui fluid multiple selection search dropdown">
-            <input type="hidden" name="hashtags">
-            <i class="dropdown icon"></i>
-            <div class="default text">Hashtags&hellip;</div>
-            <div class="menu">
-            </div>
-          </div>
+          <script>
+            document.write(renderHashtagsDropdown('hashtags', 'hashtags'));
+            $('#hashtags').dropdown(hashtagOptions);
+          </script>
         </div>
       </form>
     </main>
@@ -149,15 +162,5 @@
         </div>
       </div>
     </div>
-    <script type="text/javascript">
-      $(function() {
-        $('#categories').dropdown({
-          allowAdditions: true
-        });
-        $('#hashtags').dropdown({
-          allowAdditions: true
-        });
-      });
-    </script>
   </body>
 </html>

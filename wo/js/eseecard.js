@@ -149,6 +149,46 @@ function renderCategoryDropdown(id, name)
     '</div>');
 }
 
+
+
+
+var hashtagsKey = "Hashtags";
+
+function listHashtags()
+{
+  return retrieveObject(hashtagsKey, {});
+}
+
+function storeHashtags(hashtags)
+{
+  return storeObject(hashtagsKey, hashtags);
+}
+
+function modifyHashtags(f)
+{
+  var asd = f(listHashtags());
+  storeHashtags(asd);
+}
+
+function renderHashtagsDropdown(id, name)
+{
+  var hashtags = Object.keys(listHashtags()).map(function(hashtag, index) {
+    return '<div class="item" data-value="' + hashtag + '">' + hashtag + '</div>';
+  }).join('');
+
+  return (
+    '<div id="' + id + '" class="ui fluid multiple selection search dropdown">' +
+      '<input type="hidden">' +
+      '<i class="dropdown icon"></i>' +
+      '<div class="default text">Hashtags&hellip;</div>' +
+      '<div class="menu">' +
+        hashtags +
+      '</div>' +
+    '</div>');
+}
+
+
+
 function getURLParameter(name) {
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
 }
