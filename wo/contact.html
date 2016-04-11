@@ -68,8 +68,17 @@
         }
       };
 
-      var hashtagOptions = dropdownOptions;
-      hashtagOptions.message.addResult = 'Crear hashtag <strong>{term}</strong>';
+      var hashtagOptions = {
+        allowAdditions: true,
+        saveRemoteData: false,
+        direction: 'upward',
+        message: {
+          addResult     : 'Crear hashtag <strong>{term}</strong>',
+          count         : '{count} seleccionados',
+          maxSelections : '{maxCount} selecciones como máximo',
+          noResults     : 'No se encontró resultados de búsqueda.'
+        }
+      };;
 
       $(document).ready(function() {
         var contact = listContacts()[getURLParameter('key')];
@@ -84,7 +93,7 @@
         $('#contact-title').html(contact.name);
 
         $('#categories').dropdown(dropdownOptions);
-        $('#hashtags'  ).dropdown(dropdownOptions);
+        $('#hashtags'  ).dropdown( hashtagOptions);
 
         $('.ui.form').form({
           fields: {
