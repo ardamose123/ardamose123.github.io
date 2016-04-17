@@ -41,15 +41,20 @@
         });
 
         updateContact({
-          id         : $('#contact-id').val(),
-          name       : $('#name'      ).val(),
-          location   : $('#location'  ).val(),
-          position   : $('#position'  ).val(),
-          company    : $('#company'   ).val(),
-          phone      : $('#phone'     ).val(),
-          email      : $('#email'     ).val(),
-          categories : $('#categories').dropdown('get value'),
-          hashtags   : $('#hashtags').dropdown('get value')
+          id          : $('#contact-id'  ).val(),
+          name        : $('#name'        ).val(),
+          location    : $('#location'    ).val(),
+          position    : $('#position'    ).val(),
+          company     : $('#company'     ).val(),
+          phone       : $('#phone'       ).val(),
+          email       : $('#email'       ).val(),
+          facebook    : $('#facebook'    ).val(),
+          twitter     : $('#twitter'     ).val(),
+          linkedin    : $('#linkedin'    ).val(),
+          instagram   : $('#instagram'   ).val(),
+          observations: $('#observations').val(),
+          categories  : $('#categories'  ).dropdown('get value'),
+          hashtags    : $('#hashtags'    ).dropdown('get value')
         });
 
         $('#contact-title').html($('#name').val());
@@ -83,13 +88,19 @@
       $(document).ready(function() {
         var contact = listContacts()[getURLParameter('key')];
 
-        $('#contact-id').val(contact.id      );
-        $('#name'      ).val(contact.name    );
-        $('#location'  ).val(contact.location);
-        $('#position'  ).val(contact.position);
-        $('#company'   ).val(contact.company );
-        $('#phone'     ).val(contact.phone   );
-        $('#email'     ).val(contact.email   );
+        $('#contact-id'  ).val(contact.id          );
+        $('#name'        ).val(contact.name        );
+        $('#location'    ).val(contact.location    );
+        $('#position'    ).val(contact.position    );
+        $('#company'     ).val(contact.company     );
+        $('#phone'       ).val(contact.phone       );
+        $('#email'       ).val(contact.email       );
+        $('#facebook'    ).val(contact.facebook    );
+        $('#twitter'     ).val(contact.twitter     );
+        $('#linkedin'    ).val(contact.linkedin    );
+        $('#instagram'   ).val(contact.instagram   );
+        $('#observations').val(contact.observations);
+
         $('#contact-title').html(contact.name);
 
         $('#categories').dropdown(dropdownOptions);
@@ -146,6 +157,25 @@
           <label><i class="mail icon"></i> Correo electrónico</label>
           <input type="email" id="email">
         </div>
+
+        <h4 class="ui orange horizontal divider header">Redes sociales</h4>
+        <div class="field">
+          <label><i class="linkedin icon"></i> LinkedIn</label>
+          <input type="text" id="linkedin">
+        </div>
+        <div class="field">
+          <label><i class="facebook icon"></i> Facebook</label>
+          <input type="text" id="facebook">
+        </div>
+        <div class="field">
+          <label><i class="twitter icon"></i> Twitter</label>
+          <input type="text" id="twitter">
+        </div>
+        <div class="field">
+          <label><i class="instagram icon"></i> Instagram</label>
+          <input type="text" id="instagram">
+        </div>
+
         <h4 class="ui orange horizontal divider header">Otros datos</h4>
         <div class="field">
           <label><i class="tags icon"></i> Categorías</label>
@@ -160,6 +190,10 @@
             document.write(renderHashtagsDropdown('hashtags', 'hashtags'));
             $('#hashtags').dropdown(hashtagOptions);
           </script>
+        </div>
+        <div class="field">
+          <label><i class="comment icon"></i> Observaciones</label>
+          <textarea id="observations" rows="3"></textarea>
         </div>
       </form>
     </main>
