@@ -123,6 +123,7 @@ function listCategories()
 
 function storeCategories(categories)
 {
+  delete categories[''];
   return storeObject(categoriesKey, categories);
 }
 
@@ -161,6 +162,7 @@ function listHashtags()
 
 function storeHashtags(hashtags)
 {
+  delete hashtags[''];
   return storeObject(hashtagsKey, hashtags);
 }
 
