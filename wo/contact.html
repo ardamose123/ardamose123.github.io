@@ -41,21 +41,25 @@
         });
 
         updateContact({
-          id          : $('#contact-id'  ).val(),
-          name        : $('#name'        ).val(),
-          location    : $('#location'    ).val(),
-          position    : $('#position'    ).val(),
-          company     : $('#company'     ).val(),
-          phone       : $('#phone'       ).val(),
-          email       : $('#email'       ).val(),
-          facebook    : $('#facebook'    ).val(),
-          twitter     : $('#twitter'     ).val(),
-          linkedin    : $('#linkedin'    ).val(),
-          instagram   : $('#instagram'   ).val(),
-          observations: $('#observations').val(),
-          categories  : $('#categories'  ).dropdown('get value'),
-          hashtags    : $('#hashtags'    ).dropdown('get value')
+          id          : $('#contact-id'    ).val(),
+          name        : $('#name'          ).val(),
+          location    : $('#location input').val(),
+          position    : $('#position input').val(),
+          company     : $('#company  input').val(),
+          phone       : $('#phone'         ).val(),
+          email       : $('#email'         ).val(),
+          facebook    : $('#facebook'      ).val(),
+          twitter     : $('#twitter'       ).val(),
+          linkedin    : $('#linkedin'      ).val(),
+          instagram   : $('#instagram'     ).val(),
+          observations: $('#observations'  ).val(),
+          categories  : $('#categories'    ).dropdown('get value'),
+          hashtags    : $('#hashtags'      ).dropdown('get value')
         });
+
+        addSearchTarget(companiesKey, $('#company  input').val());
+        addSearchTarget(positionsKey, $('#position input').val());
+        addSearchTarget(locationsKey, $('#location input').val());
 
         $('#contact-title').html($('#name').val());
         $('#saveButton').removeClass('loading');
@@ -88,18 +92,18 @@
       $(document).ready(function() {
         var contact = listContacts()[getURLParameter('key')];
 
-        $('#contact-id'  ).val(contact.id          );
-        $('#name'        ).val(contact.name        );
-        $('#location'    ).val(contact.location    );
-        $('#position'    ).val(contact.position    );
-        $('#company'     ).val(contact.company     );
-        $('#phone'       ).val(contact.phone       );
-        $('#email'       ).val(contact.email       );
-        $('#facebook'    ).val(contact.facebook    );
-        $('#twitter'     ).val(contact.twitter     );
-        $('#linkedin'    ).val(contact.linkedin    );
-        $('#instagram'   ).val(contact.instagram   );
-        $('#observations').val(contact.observations);
+        $('#contact-id'    ).val(contact.id          );
+        $('#name'          ).val(contact.name        );
+        $('#location input').val(contact.location    );
+        $('#position input').val(contact.position    );
+        $('#company  input').val(contact.company     );
+        $('#phone'         ).val(contact.phone       );
+        $('#email'         ).val(contact.email       );
+        $('#facebook'      ).val(contact.facebook    );
+        $('#twitter'       ).val(contact.twitter     );
+        $('#linkedin'      ).val(contact.linkedin    );
+        $('#instagram'     ).val(contact.instagram   );
+        $('#observations'  ).val(contact.observations);
 
         $('#contact-title').html(contact.name);
 
@@ -119,8 +123,18 @@
           onSuccess: saveContact
         });
 
-        $('#categories').dropdown('set selected', contact.categories.split(','));
-        $('#hashtags').dropdown('set selected', contact.hashtags.split(','));
+        var contactCategories = (contact.categories === '') ? [] : contact.categories.split(',');
+        var contactHashtags   = (contact.hashtags   === '') ? [] : contact.hashtags  .split(',');
+
+        $('#categories').dropdown('set selected', contactCategories);
+        $('#hashtags'  ).dropdown('set selected', contactHashtags  );
+
+        $.fn.search.settings.minCharacters = 3;
+        $.fn.search.settings.templates.message = function(message, type) { return ""; };
+
+        $('#company' ).search({ source: searchArray(companiesKey) });
+        $('#position').search({ source: searchArray(positionsKey) });
+        $('#location').search({ source: searchArray(locationsKey) });
       });
     </script>
   </head>
@@ -138,15 +152,24 @@
         </div>
         <div class="field">
           <label><i class="marker icon"></i> Ubicación</label>
-          <input type="text" id="location">
+          <div class="ui search" id="location">
+            <input class="prompt" type="text">
+            <div class="results"></div>
+          </div>
         </div>
         <div class="field">
           <label><i class="travel icon"></i> Puesto o rol</label>
-          <input type="text" id="position">
+          <div class="ui search" id="position">
+            <input class="prompt" type="text">
+            <div class="results"></div>
+          </div>
         </div>
         <div class="field">
           <label><i class="building icon"></i> Empresa</label>
-          <input type="text" id="company">
+          <div class="ui search" id="company">
+            <input class="prompt" type="text">
+            <div class="results"></div>
+          </div>
         </div>
         <h4 class="ui orange horizontal divider header">Contacto</h4>
         <div class="field">
