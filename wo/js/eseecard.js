@@ -194,3 +194,28 @@ function renderHashtagsDropdown(id, name)
 function getURLParameter(name) {
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null;
 }
+
+
+
+
+function searchArray(source)
+{
+  return retrieveObject(source, []);
+}
+
+function addSearchTarget(source, target)
+{
+  var s = searchArray(source);
+  var i = s.findIndex(function(e) { e.title === target });
+
+  if (i === -1)
+    s.push({ title: target, count: 1 });
+  else
+    s[i].count++;
+
+  return storeObject(source, s);
+}
+
+var companiesKey = 'Companies';
+var positionsKey      = 'Jobs';
+var locationsKey = 'Locations';
