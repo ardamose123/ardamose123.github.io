@@ -88,6 +88,17 @@
         </div>
       </div>
     </div>
+    <div id="no-contacts-modal" class="ui modal">
+      <div class="ui icon header">
+        <i class="add user icon"></i>
+        ¡Bienvenido!
+        <p>Agregue su primer contacto <a href="new-contact.html">aquí</a></p>
+      </div>
+      <!-- <div class="content">
+        <div class="description">
+        </div>
+      </div> -->
+    </div>
     <script type="text/javascript">
       $(function() {
         $('.ui.sticky').sticky({ context: '.ui.items' });
@@ -98,8 +109,26 @@
         });
 
         $('.ui.sidebar .item').click(hideFilteringSidebar);
-
         $('#remove-contact-modal').modal();
+        $('#no-contacts-modal').modal({ closable: false });
+      });
+
+      function showFilteringSidebar() {
+        $('.ui.sidebar').sidebar('show');
+        return false;
+      }
+
+      function hideFilteringSidebar() {
+        $('.ui.sidebar').sidebar('hide');
+        return false;
+      }
+
+      function refreshContacts() {
+        var contacts = listContacts();
+        $('#contact-list').html(renderContactList(contacts));
+
+        if (Object.keys(contacts).length === 0)
+          $('#no-contacts-modal').modal('show');
 
         $('.trash.icon').click(function(event) {
           event.preventDefault();
@@ -113,16 +142,6 @@
           $('#remove-contact-modal').modal('show');
           return false;
         });
-      });
-
-      function showFilteringSidebar() {
-        $('.ui.sidebar').sidebar('show');
-        return false;
-      }
-
-      function hideFilteringSidebar() {
-        $('.ui.sidebar').sidebar('hide');
-        return false;
       }
 
       function removeContact()
@@ -132,7 +151,7 @@
         $('#remove-contact-modal').modal('hide');
       }
 
-      $('#contact-list').html(renderContactList(listContacts()));
+      refreshContacts();
     </script>
   </body>
 </html>
