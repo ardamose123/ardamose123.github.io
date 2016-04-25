@@ -105,9 +105,7 @@
         });
 
         $.fn.search.settings.minCharacters = 3;
-        $.fn.search.settings.templates.message = function(message, type) { return ""; }
-          return "";
-        }
+        $.fn.search.settings.templates.message = function(message, type) { return ""; };
 
         $('#company' ).search({ source: searchArray(companiesKey) });
         $('#position').search({ source: searchArray(positionsKey) });
