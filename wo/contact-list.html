@@ -149,8 +149,8 @@
       function removeContact()
       {
         deleteContact($('#victim-id').val());
-        $('#contact-list').html(renderContactList(listContacts()));
         $('#remove-contact-modal').modal('hide');
+        refreshContacts();
       }
     </script>
   </body>
