@@ -111,6 +111,8 @@
         $('.ui.sidebar .item').click(hideFilteringSidebar);
         $('#remove-contact-modal').modal();
         $('#no-contacts-modal').modal({ closable: false });
+
+        refreshContacts();
       });
 
       function showFilteringSidebar() {
@@ -150,8 +152,6 @@
         $('#contact-list').html(renderContactList(listContacts()));
         $('#remove-contact-modal').modal('hide');
       }
-
-      refreshContacts();
     </script>
   </body>
 </html>
