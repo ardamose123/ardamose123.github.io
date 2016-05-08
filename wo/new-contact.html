@@ -22,6 +22,26 @@
       }
     </style>
     <script type="text/javascript">
+      function getContactFromForm()
+      {
+        return {
+          name        : $('#name'          ).val(),
+          location    : $('#location input').val(),
+          position    : $('#position input').val(),
+          company     : $('#company  input').val(),
+          phone       : $('#phone'         ).val(),
+          email       : $('#email'         ).val(),
+          facebook    : $('#facebook'      ).val(),
+          twitter     : $('#twitter'       ).val(),
+          linkedin    : $('#linkedin'      ).val(),
+          instagram   : $('#instagram'     ).val(),
+          observations: $('#observations'  ).val(),
+          categories  : $('#categories'    ).dropdown('get value'),
+          hashtags    : $('#hashtags'      ).dropdown('get value'),
+          notes       : $('#hashtags'      ).dropdown('get value')
+        };
+      }
+
       function createContact()
       {
         $('#saveButton').addClass('loading');
@@ -40,21 +60,7 @@
           return hashtags;
         });
 
-        addContact({
-          name        : $('#name'          ).val(),
-          location    : $('#location input').val(),
-          position    : $('#position input').val(),
-          company     : $('#company  input').val(),
-          phone       : $('#phone'         ).val(),
-          email       : $('#email'         ).val(),
-          facebook    : $('#facebook'      ).val(),
-          twitter     : $('#twitter'       ).val(),
-          linkedin    : $('#linkedin'      ).val(),
-          instagram   : $('#instagram'     ).val(),
-          observations: $('#observations'  ).val(),
-          categories  : $('#categories'    ).dropdown('get value'),
-          hashtags    : $('#hashtags'      ).dropdown('get value')
-        });
+        addContact(getContactFromForm());
 
         addSearchTarget(companiesKey, $('#company  input').val());
         addSearchTarget(positionsKey, $('#position input').val());
@@ -62,6 +68,30 @@
 
         $('#saveButton').removeClass('loading');
         window.location = 'contact.html?type=contact&key=' + $('#name').val();
+      }
+
+      function backToContactList()
+      {
+        var formHasData = false;
+
+        formHasData = formHasData || $('#name'          ).val() !== '';
+        formHasData = formHasData || $('#location input').val() !== '';
+        formHasData = formHasData || $('#position input').val() !== '';
+        formHasData = formHasData || $('#company  input').val() !== '';
+        formHasData = formHasData || $('#phone'         ).val() !== '';
+        formHasData = formHasData || $('#email'         ).val() !== '';
+        formHasData = formHasData || $('#facebook'      ).val() !== '';
+        formHasData = formHasData || $('#twitter'       ).val() !== '';
+        formHasData = formHasData || $('#linkedin'      ).val() !== '';
+        formHasData = formHasData || $('#instagram'     ).val() !== '';
+        formHasData = formHasData || $('#observations'  ).val() !== '';
+        formHasData = formHasData || $('#categories'    ).dropdown('get value') !== '';
+        formHasData = formHasData || $('#hashtags'      ).dropdown('get value') !== '';
+
+        if (formHasData)
+          $('#exit-confirmation-modal').modal('show');
+        else
+          window.location = 'contact-list.html';
       }
 
       var dropdownOptions = {
@@ -104,6 +134,15 @@
           onSuccess: createContact
         });
 
+        $('#exit-confirmation-modal').modal({
+          onApprove: function(element) {
+            window.location = 'contact-list.html';
+          },
+          onDeny: function(modal) {
+            $('#exit-confirmation-modal').modal('hide');
+          }
+        });
+
         $.fn.search.settings.minCharacters = 3;
         $.fn.search.settings.templates.message = function(message, type) { return ""; };
 
@@ -115,7 +154,7 @@
   </head>
   <body>
     <div class="ui inverted blue top fixed borderless menu">
-      <div class="item" onclick="window.location = 'contact-list.html'"><i class="ui arrow left icon"></i></div>
+      <div class="item" onclick="backToContactList();"><i class="ui arrow left icon"></i></div>
       <div class="item">Nuevo contacto</div>
     </div>
     <main>
@@ -197,8 +236,30 @@
     <div class="ui bottom fixed borderless menu">
       <div class="right menu">
         <div class="item">
-          <button class="ui primary compact button" id="saveButton" onclick="$('.ui.form').form('validate form');" style="margin-right: 0.5em;"><i class="ui check icon"></i> Registrar contacto</button>
+          <button id="saveButton" class="ui primary compact button" onclick="$('.ui.form').form('validate form');">
+            <i class="ui check icon"></i>
+            Registrar contacto
+          </button>
         </div>
+      </div>
+    </div>
+    <div id="exit-confirmation-modal" class="ui modal">
+      <div class="header">
+        Datos sin guardar
+      </div>
+      <div class="content">
+        <p>
+          Usted ha llenado parte de este formulario, pero no ha creado un nuevo
+          contacto.
+        </p>
+        <p>
+          ¿Desea volver a la lista de contactos y desechar los datos
+          en este formulario?
+        </p>
+      </div>
+      <div class="actions">
+        <div class="ui primary approve button">Ir a la lista de contactos</div>
+        <div class="ui deny button">Volver al formulario</div>
       </div>
     </div>
   </body>

@@ -22,6 +22,8 @@
       }
     </style>
     <script type="text/javascript">
+      var finishedLoading = false;
+
       function saveContact()
       {
         $('#saveButton').addClass('loading');
@@ -62,7 +64,8 @@
         addSearchTarget(locationsKey, $('#location input').val());
 
         $('#contact-title').html($('#name').val());
-        $('#saveButton').removeClass('loading');
+        $('#saveButton').removeClass('loading').transition('fade right');
+        $('#seeCard').addClass('primary');
       }
 
       var dropdownOptions = {
@@ -74,7 +77,8 @@
           count         : '{count} seleccionados',
           maxSelections : '{maxCount} selecciones como máximo',
           noResults     : 'No se encontró resultados de búsqueda.'
-        }
+        },
+        onChange: enableSaveChanges
       };
 
       var hashtagOptions = {
@@ -86,8 +90,26 @@
           count         : '{count} seleccionados',
           maxSelections : '{maxCount} selecciones como máximo',
           noResults     : 'No se encontró resultados de búsqueda.'
+        },
+        onChange: enableSaveChanges
+      };
+
+      function backToContactList()
+      {
+        if ($('#saveButton').transition('is visible'))
+          $('#exit-confirmation-modal').modal('show');
+        else
+          window.location = 'contact-list.html';
+      }
+
+      function enableSaveChanges()
+      {
+        if (finishedLoading && ! $('#saveButton').transition('is visible'))
+        {
+          $('#seeCard').removeClass('primary');
+          $('#saveButton').transition('fade right in');
         }
-      };;
+      }
 
       $(document).ready(function() {
         var contact = listContacts()[getURLParameter('key')];
@@ -135,12 +157,22 @@
         $('#company' ).search({ source: searchArray(companiesKey) });
         $('#position').search({ source: searchArray(positionsKey) });
         $('#location').search({ source: searchArray(locationsKey) });
+
+        $('#exit-confirmation-modal').modal({
+          onApprove: function(element) {
+            window.location = 'contact-list.html';
+          },
+          onDeny: function(modal) {
+            $('#exit-confirmation-modal').modal('hide');
+          }
+        });
+        finishedLoading = true;
       });
     </script>
   </head>
   <body>
     <div class="ui inverted blue top fixed borderless menu">
-      <div class="item" onclick="window.location = 'contact-list.html'"><i class="ui arrow left icon"></i></div>
+      <div class="item" onclick="backToContactList();"><i class="ui arrow left icon"></i></div>
       <div class="item" id="contact-title"></div>
     </div>
     <main>
@@ -148,55 +180,55 @@
         <input type="hidden" id="contact-id">
         <div class="field">
           <label><i class="user icon"></i> Nombre</label>
-          <input type="text" id="name" placeholder="Nombre">
+          <input type="text" id="name" placeholder="Nombre" oninput="enableSaveChanges();">
         </div>
         <div class="field">
           <label><i class="marker icon"></i> Ubicación</label>
           <div class="ui search" id="location">
-            <input class="prompt" type="text">
+            <input class="prompt" type="text" oninput="enableSaveChanges();">
             <div class="results"></div>
           </div>
         </div>
         <div class="field">
           <label><i class="travel icon"></i> Puesto o rol</label>
           <div class="ui search" id="position">
-            <input class="prompt" type="text">
+            <input class="prompt" type="text" oninput="enableSaveChanges();">
             <div class="results"></div>
           </div>
         </div>
         <div class="field">
           <label><i class="building icon"></i> Empresa</label>
           <div class="ui search" id="company">
-            <input class="prompt" type="text">
+            <input class="prompt" type="text" oninput="enableSaveChanges();">
             <div class="results"></div>
           </div>
         </div>
         <h4 class="ui orange horizontal divider header">Contacto</h4>
         <div class="field">
           <label><i class="phone icon"></i> Número de teléfono</label>
-          <input type="tel" id="phone">
+          <input type="tel" id="phone" oninput="enableSaveChanges();">
         </div>
         <div class="field">
           <label><i class="mail icon"></i> Correo electrónico</label>
-          <input type="email" id="email">
+          <input type="email" id="email" oninput="enableSaveChanges();">
         </div>
 
         <h4 class="ui orange horizontal divider header">Redes sociales</h4>
         <div class="field">
           <label><i class="linkedin icon"></i> LinkedIn</label>
-          <input type="text" id="linkedin">
+          <input type="text" id="linkedin" oninput="enableSaveChanges();">
         </div>
         <div class="field">
           <label><i class="facebook icon"></i> Facebook</label>
-          <input type="text" id="facebook">
+          <input type="text" id="facebook" oninput="enableSaveChanges();">
         </div>
         <div class="field">
           <label><i class="twitter icon"></i> Twitter</label>
-          <input type="text" id="twitter">
+          <input type="text" id="twitter" oninput="enableSaveChanges();">
         </div>
         <div class="field">
           <label><i class="instagram icon"></i> Instagram</label>
-          <input type="text" id="instagram">
+          <input type="text" id="instagram" oninput="enableSaveChanges();">
         </div>
 
         <h4 class="ui orange horizontal divider header">Otros datos</h4>
@@ -216,16 +248,34 @@
         </div>
         <div class="field">
           <label><i class="comment icon"></i> Notas</label>
-          <textarea id="observations" rows="3"></textarea>
+          <textarea id="observations" rows="3" oninput="enableSaveChanges();"></textarea>
         </div>
       </form>
     </main>
     <div class="ui bottom fixed borderless menu">
       <div class="right menu">
         <div class="item">
-          <button class="ui compact button" id="saveButton" onclick="$('.ui.form').form('validate form');" style="margin-right: 0.5em;"><i class="ui download icon"></i> Guardar</button>
-          <button class="ui primary compact button" onclick="window.location = 'card-page.html;"><i class="ui browser icon"></i> Ver tarjeta</button>
+          <button id="saveButton" class="ui primary hidden transition compact button" onclick="$('.ui.form').form('validate form');" style="margin-right: 0.5em;"><i class="ui download icon"></i> Guardar</button>
+          <button id="seeCard" class="ui primary compact button" onclick="window.location = 'card-page.html;"><i class="ui browser icon"></i> Ver tarjeta</button>
         </div>
+      </div>
+    </div>
+    <div id="exit-confirmation-modal" class="ui modal">
+      <div class="header">
+        Datos sin guardar
+      </div>
+      <div class="content">
+        <p>
+          Usted ha modificado parte de este formulario, pero no ha guardado los
+          cambios aún.
+        </p>
+        <p>
+          ¿Desea deshacer los cambios realizados en este contacto?
+        </p>
+      </div>
+      <div class="actions">
+        <div class="ui primary approve button">Ir a la lista de contactos</div>
+        <div class="ui deny button">Volver al formulario</div>
       </div>
     </div>
   </body>
