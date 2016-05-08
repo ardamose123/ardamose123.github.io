@@ -34,7 +34,7 @@
         return $('.email.input').map(function(i, e) { return e.value }).get().join(',');
       }
 
-      function addPhoneInput(event, defValue)
+      function addPhoneInput(event, defValue='')
       {
         if (event)
         {
@@ -46,7 +46,7 @@
           + '<div class="field">'
             + '<div class="ui action input">'
               + '<input type="tel" class="phone input" value="' + defValue + '" oninput="enableSaveChanges();">'
-              + '<button class="ui icon button"><i class="trash icon"></i></button>'
+              + '<button class="ui icon button" onclick="removePhoneOrEmail(event);"><i class="trash icon"></i></button>'
             + '</div>'
           + '</div>'
         );
@@ -54,7 +54,7 @@
 
       var lastEmailId = 0;
 
-      function addEmailInput(event, defValue)
+      function addEmailInput(event, defValue='')
       {
         if (event)
         {
@@ -66,7 +66,7 @@
           + '<div class="field">'
             + '<div class="ui action input">'
               + '<input type="email" name="email' + lastEmailId + '" class="email input" value="' + defValue + '"  oninput="enableSaveChanges();">'
-              + '<button class="ui icon button"><i class="trash icon"></i></button>'
+              + '<button class="ui icon button" onclick="removePhoneOrEmail(event);"><i class="trash icon"></i></button>'
             + '</div>'
           + '</div>'
         );
@@ -75,6 +75,11 @@
 
         if (!defValue)
           reconfigureForm();
+      }
+
+      function removePhoneOrEmail(event)
+      {
+        $(event.target).closest('div.field').remove();
       }
 
       function saveContact()
