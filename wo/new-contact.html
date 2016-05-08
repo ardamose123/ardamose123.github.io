@@ -137,7 +137,7 @@
           + '<div class="field">'
             + '<div class="ui action input">'
               + '<input type="tel" class="phone input">'
-              + '<button class="ui icon button"><i class="trash icon"></i></button>'
+              + '<button class="ui icon button" onclick="removePhoneOrEmail(event);"><i class="trash icon"></i></button>'
             + '</div>'
           + '</div>'
         );
@@ -154,13 +154,21 @@
           + '<div class="field">'
             + '<div class="ui action input">'
               + '<input type="email" name="email' + lastEmailId + '" class="email input">'
-              + '<button class="ui icon button"><i class="trash icon"></i></button>'
+              + '<button class="ui icon button" onclick="removePhoneOrEmail(event);"><i class="trash icon"></i></button>'
             + '</div>'
           + '</div>'
         );
 
         lastEmailId++;
         reconfigureForm();
+      }
+
+      function removePhoneOrEmail(event)
+      {
+        event.stopPropagation();
+        event.preventDefault();
+
+        $(event.target).closest('div.field').remove();
       }
 
       function reconfigureForm()

@@ -79,6 +79,9 @@
 
       function removePhoneOrEmail(event)
       {
+        event.stopPropagation();
+        event.preventDefault();
+
         $(event.target).closest('div.field').remove();
       }
 
