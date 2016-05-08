@@ -29,8 +29,8 @@
           location    : $('#location input').val(),
           position    : $('#position input').val(),
           company     : $('#company  input').val(),
-          phone       : $('#phone'         ).val(),
-          email       : $('#email'         ).val(),
+          phone       : getPhoneNumbers(),
+          email       : getEmailAccounts(),
           facebook    : $('#facebook'      ).val(),
           twitter     : $('#twitter'       ).val(),
           linkedin    : $('#linkedin'      ).val(),
@@ -40,6 +40,16 @@
           hashtags    : $('#hashtags'      ).dropdown('get value'),
           notes       : $('#hashtags'      ).dropdown('get value')
         };
+      }
+
+      function getPhoneNumbers()
+      {
+        return $('.phone.input').map(function(i, e) { return e.value }).get().join(',');
+      }
+
+      function getEmailAccounts()
+      {
+        return $('.email.input').map(function(i, e) { return e.value }).get().join(',');
       }
 
       function createContact()
@@ -78,8 +88,8 @@
         formHasData = formHasData || $('#location input').val() !== '';
         formHasData = formHasData || $('#position input').val() !== '';
         formHasData = formHasData || $('#company  input').val() !== '';
-        formHasData = formHasData || $('#phone'         ).val() !== '';
-        formHasData = formHasData || $('#email'         ).val() !== '';
+        formHasData = formHasData || getPhoneNumbers ()         !== '';
+        formHasData = formHasData || getEmailAccounts()         !== '';
         formHasData = formHasData || $('#facebook'      ).val() !== '';
         formHasData = formHasData || $('#twitter'       ).val() !== '';
         formHasData = formHasData || $('#linkedin'      ).val() !== '';
@@ -118,13 +128,46 @@
         }
       };
 
-      $(document).ready(function() {
-        $('#hashtags').dropdown(dropdownOptions);
+      function addPhoneInput(event)
+      {
+        event.stopPropagation();
+        event.preventDefault();
 
-        $('.ui.form').form({
+        $(event.target).parent().before(''
+          + '<div class="field">'
+            + '<div class="ui action input">'
+              + '<input type="tel" class="phone input">'
+              + '<button class="ui icon button"><i class="trash icon"></i></button>'
+            + '</div>'
+          + '</div>'
+        );
+      }
+
+      var lastEmailId = 0;
+
+      function addEmailInput(event)
+      {
+        event.stopPropagation();
+        event.preventDefault();
+
+        $(event.target).parent().before(''
+          + '<div class="field">'
+            + '<div class="ui action input">'
+              + '<input type="email" name="email' + lastEmailId + '" class="email input">'
+              + '<button class="ui icon button"><i class="trash icon"></i></button>'
+            + '</div>'
+          + '</div>'
+        );
+
+        lastEmailId++;
+        reconfigureForm();
+      }
+
+      function reconfigureForm()
+      {
+        var initConfig = {
           fields: {
-            name : 'empty',
-            email: 'email'
+            name : 'empty'
           },
           prompt: {
             empty : 'Escribe algo en este campo.',
@@ -132,7 +175,19 @@
           },
           inline: true,
           onSuccess: createContact
+        };
+
+        $('.email.input').each(function(index, ei) {
+          initConfig.fields[$(ei).attr('name')] = 'email';
         });
+
+        $('.ui.form').form(initConfig);
+      }
+
+      $(document).ready(function() {
+        $('#hashtags').dropdown(dropdownOptions);
+
+        reconfigureForm();
 
         $('#exit-confirmation-modal').modal({
           onApprove: function(element) {
@@ -185,13 +240,25 @@
           </div>
         </div>
         <h4 class="ui orange horizontal divider header">Contacto</h4>
+
         <div class="field">
-          <label><i class="phone icon"></i> Número de teléfono</label>
-          <input type="tel" id="phone">
+          <label>
+            <i class="phone icon"></i>
+            Números de teléfono
+          </label>
         </div>
         <div class="field">
-          <label><i class="mail icon"></i> Correo electrónico</label>
-          <input type="email" id="email">
+          <button class="ui compact tiny button" onclick="addPhoneInput(event);"><i class="plus icon"></i> Agregar número</button>
+        </div>
+
+        <div class="field">
+          <label>
+            <i class="mail icon"></i>
+            Correos electrónicos
+          </label>
+        </div>
+        <div class="field">
+          <button class="ui compact tiny button" onclick="addEmailInput(event);"><i class="plus icon"></i> Agregar correo</button>
         </div>
 
         <h4 class="ui orange horizontal divider header">Redes sociales</h4>

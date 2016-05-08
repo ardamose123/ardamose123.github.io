@@ -24,6 +24,59 @@
     <script type="text/javascript">
       var finishedLoading = false;
 
+      function getPhoneNumbers()
+      {
+        return $('.phone.input').map(function(i, e) { return e.value }).get().join(',');
+      }
+
+      function getEmailAccounts()
+      {
+        return $('.email.input').map(function(i, e) { return e.value }).get().join(',');
+      }
+
+      function addPhoneInput(event, defValue)
+      {
+        if (event)
+        {
+          event.stopPropagation();
+          event.preventDefault();
+        }
+
+        $(event.target).parent().before(''
+          + '<div class="field">'
+            + '<div class="ui action input">'
+              + '<input type="tel" class="phone input" value="' + defValue + '" oninput="enableSaveChanges();">'
+              + '<button class="ui icon button"><i class="trash icon"></i></button>'
+            + '</div>'
+          + '</div>'
+        );
+      }
+
+      var lastEmailId = 0;
+
+      function addEmailInput(event, defValue)
+      {
+        if (event)
+        {
+          event.stopPropagation();
+          event.preventDefault();
+        }
+
+        $(event.target).parent().before(''
+          + '<div class="field">'
+            + '<div class="ui action input">'
+              + '<input type="email" name="email' + lastEmailId + '" class="email input" value="' + defValue + '"  oninput="enableSaveChanges();">'
+              + '<button class="ui icon button"><i class="trash icon"></i></button>'
+            + '</div>'
+          + '</div>'
+        );
+
+        lastEmailId++;
+
+        if (!defValue)
+          reconfigureForm();
+      }
+
       function saveContact()
       {
         $('#saveButton').addClass('loading');
@@ -48,8 +101,8 @@
           location    : $('#location input').val(),
           position    : $('#position input').val(),
           company     : $('#company  input').val(),
-          phone       : $('#phone'         ).val(),
-          email       : $('#email'         ).val(),
+          phone       : getPhoneNumbers(),
+          email       : getEmailAccounts(),
           facebook    : $('#facebook'      ).val(),
           twitter     : $('#twitter'       ).val(),
           linkedin    : $('#linkedin'      ).val(),
@@ -111,6 +164,27 @@
         }
       }
 
+      function reconfigureForm()
+      {
+        var initConfig = {
+          fields: {
+            name : 'empty'
+          },
+          prompt: {
+            empty : 'Escribe algo en este campo.',
+            email : 'Escribe una dirección de correo electrónico correcta.'
+          },
+          inline: true,
+          onSuccess: saveContact
+        };
+
+        $('.email.input').each(function(index, ei) {
+          initConfig.fields[$(ei).attr('name')] = 'email';
+        });
+
+        $('.ui.form').form(initConfig);
+      }
+
       $(document).ready(function() {
         var contact = listContacts()[getURLParameter('key')];
 
@@ -119,8 +193,6 @@
         $('#location input').val(contact.location    );
         $('#position input').val(contact.position    );
         $('#company  input').val(contact.company     );
-        $('#phone'         ).val(contact.phone       );
-        $('#email'         ).val(contact.email       );
         $('#facebook'      ).val(contact.facebook    );
         $('#twitter'       ).val(contact.twitter     );
         $('#linkedin'      ).val(contact.linkedin    );
@@ -132,18 +204,30 @@
         $('#categories').dropdown(dropdownOptions);
         $('#hashtags'  ).dropdown( hashtagOptions);
 
-        $('.ui.form').form({
-          fields: {
-            name : 'empty',
-            email: 'email'
-          },
-          prompt: {
-            empty : 'Escribe algo en este campo.',
-            email : 'Escribe una dirección de correo electrónico correcta.'
-          },
-          inline: true,
-          onSuccess: saveContact
-        });
+        function makeEvent(target) {
+          return {
+            stopPropagation: function() {},
+            preventDefault: function() {},
+            target: target
+          };
+        };
+
+        console.log(contact);
+
+        contact
+          .phone
+          .split(',')
+          .forEach(function(p) { addPhoneInput(makeEvent('#addPhone'), p) });
+
+        contact
+          .email
+          .split(',')
+          .forEach(function(m) {
+            if (m !== '')
+              addEmailInput(makeEvent('#addEmail'), m)
+          });
+
+        reconfigureForm();
 
         var contactCategories = (contact.categories === '') ? [] : contact.categories.split(',');
         var contactHashtags   = (contact.hashtags   === '') ? [] : contact.hashtags  .split(',');
@@ -205,12 +289,23 @@
         </div>
         <h4 class="ui orange horizontal divider header">Contacto</h4>
         <div class="field">
-          <label><i class="phone icon"></i> Número de teléfono</label>
-          <input type="tel" id="phone" oninput="enableSaveChanges();">
+          <label>
+            <i class="phone icon"></i>
+            Números de teléfono
+          </label>
         </div>
         <div class="field">
-          <label><i class="mail icon"></i> Correo electrónico</label>
-          <input type="email" id="email" oninput="enableSaveChanges();">
+          <button id="addPhone" class="ui compact tiny button" onclick="addPhoneInput(event);"><i class="plus icon"></i> Agregar número</button>
+        </div>
+
+        <div class="field">
+          <label>
+            <i class="mail icon"></i>
+            Correos electrónicos
+          </label>
+        </div>
+        <div class="field">
+          <button id="addEmail" class="ui compact tiny button" onclick="addEmailInput(event);"><i class="plus icon"></i> Agregar correo</button>
         </div>
 
         <h4 class="ui orange horizontal divider header">Redes sociales</h4>
