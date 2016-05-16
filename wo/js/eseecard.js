@@ -217,5 +217,10 @@ function addSearchTarget(source, target)
 }
 
 var companiesKey = 'Companies';
-var positionsKey      = 'Jobs';
+var positionsKey = 'Jobs';
 var locationsKey = 'Locations';
+
+function cleanLocalStorage()
+{
+  Object.keys(localStorage).forEach(function(key) { localStorage.removeItem(key); });
+}

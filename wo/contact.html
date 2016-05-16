@@ -83,10 +83,23 @@
         event.preventDefault();
 
         $(event.target).closest('div.field').remove();
+        enableSaveChanges();
+      }
+
+      function saveAndExit()
+      {
+        $('#exit-confirmation-modal').modal('hide');
+
+        if ($('.ui.form').form('is valid'))
+        {
+          saveContact();
+          window.location = 'contact-list.html';
+        }
       }
 
       function saveContact()
       {
+        console.log('contact is being saved!');
         $('#saveButton').addClass('loading');
 
         modifyCategories(function(categories) {
@@ -125,7 +138,7 @@
         addSearchTarget(locationsKey, $('#location input').val());
 
         $('#contact-title').html($('#name').val());
-        $('#saveButton').removeClass('loading').transition('fade right');
+        $('#saveButton').removeClass('loading').transition('fade right out');
         $('#seeCard').addClass('primary');
       }
 
@@ -220,19 +233,20 @@
           };
         };
 
-        console.log(contact);
-
         contact
           .phone
           .split(',')
-          .forEach(function(p) { addPhoneInput(makeEvent('#addPhone'), p) });
+          .forEach(function(p) {
+            if (p !== '')
+              addPhoneInput(makeEvent('#addPhone'), p);
+          });
 
         contact
           .email
           .split(',')
           .forEach(function(m) {
             if (m !== '')
-              addEmailInput(makeEvent('#addEmail'), m)
+              addEmailInput(makeEvent('#addEmail'), m);
           });
 
         reconfigureForm();
@@ -378,7 +392,7 @@
       </div>
       <div class="actions">
         <div class="ui primary approve button"><i class="checkmark icon"></i> Sí</div>
-        <div class="ui button" onclick="$('.ui.form').form('validate form');"><i class="ui download icon"></i> Guardar</div>
+        <div class="ui button" onclick="saveAndExit();"><i class="ui download icon"></i> Guardar</div>
         <div class="ui deny button"><i class="arrow left icon"></i> Volver al formulario</div>
       </div>
     </div>

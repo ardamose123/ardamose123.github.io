@@ -42,6 +42,17 @@
         };
       }
 
+      function saveAndExit()
+      {
+        $('#exit-confirmation-modal').modal('hide');
+
+        if ($('.ui.form').form('is valid'))
+        {
+          createContact();
+          window.location = 'contact-list.html';
+        }
+      }
+
       function getPhoneNumbers()
       {
         return $('.phone.input').map(function(i, e) { return e.value }).get().join(',');
@@ -324,17 +335,14 @@
       </div>
       <div class="content">
         <p>
-          Usted ha llenado parte de este formulario, pero no ha creado un nuevo
-          contacto.
-        </p>
-        <p>
-          ¿Desea volver a la lista de contactos y desechar los datos
-          en este formulario?
+          ¿Desea volver a la lista de contactos y desechar los datos en este
+          formulario?
         </p>
       </div>
       <div class="actions">
-        <div class="ui primary approve button">Sí</div>
-        <div class="ui deny button">Volver al formulario</div>
+        <div class="ui primary approve button"><i class="checkmark icon"></i> Sí</div>
+        <div class="ui button" onclick="saveAndExit();"><i class="ui plus icon"></i> Crear contacto</div>
+        <div class="ui deny button"><i class="arrow left icon"></i> Volver al formulario</div>
       </div>
     </div>
   </body>

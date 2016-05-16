@@ -723,7 +723,7 @@ input::selection {
 ---------------*/
 
 .ui.button:hover {
-  background-color: #CACBCD;
+  background-color: #DEDDBB;
   background-image: none;
   box-shadow: 0px 0px 0px 1px transparent inset, 0px 0em 0px 0px #DEDDBB inset;
   color: rgba(0, 0, 0, 0.8);
@@ -738,7 +738,7 @@ input::selection {
 ---------------*/
 
 .ui.button:focus {
-  background-color: #CACBCD;
+  background-color: #DEDDBB;
   color: rgba(0, 0, 0, 0.8);
   background-image: '' !important;
   box-shadow: '' !important;
@@ -765,20 +765,20 @@ input::selection {
 ---------------*/
 
 .ui.active.button {
-  background-color: #C0C1C2;
+  background-color: #DEDDBB;
   background-image: none;
   box-shadow: 0px 0px 0px 1px transparent inset;
   color: rgba(0, 0, 0, 0.95);
 }
 
 .ui.active.button:hover {
-  background-color: #C0C1C2;
+  background-color: #DEDDBB;
   background-image: none;
   color: rgba(0, 0, 0, 0.95);
 }
 
 .ui.active.button:active {
-  background-color: #C0C1C2;
+  background-color: #DEDDBB;
   background-image: none;
 }
 
