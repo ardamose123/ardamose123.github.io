@@ -20,28 +20,40 @@
         float: right;
       }
     </style>
+    <script type="text/javascript">
+      var categories = {};
+      var categoryFilter = null;
+
+      var cts = listContacts();
+      Object.keys(cts).map(function(contact) {
+        var contactCategories = cts[contact].categories.split(',');
+
+        contactCategories.forEach(function(category) {
+          if (categories[category])
+            categories[category] = categories[category] + 1;
+          else
+            categories[category] = 1;
+        });
+      });
+    </script>
   </head>
   <body>
     <div class="ui large right vertical menu sidebar">
       <div class="item">
         <div class="header">Categorías</div>
         <div class="menu">
-          <a class="item">
-            <div class="ui label">1</div>
-            Familia
+          <a class="item" onclick="categoryFilter=null; refreshContacts();">
+            <div class="ui label">
+              <script>document.write(Object.keys(cts).length);</script>
+            </div>
+            Todos los contactos
           </a>
-          <a class="item">
-            <div class="ui label">20</div>
-            Amigos
-          </a>
-          <a class="item">
-            <div class="ui label">72</div>
-            Negocios
-          </a>
-          <a class="item">
-            <div class="ui label">15</div>
-            Otros
-          </a>
+          <script type="text/javascript">
+            for (category in categories)
+            {
+              document.write('<a class="item" onclick="categoryFilter=\'' + category + '\'; refreshContacts();"><div class="ui label">' + categories[category] + '</div>' + category + '</a>');
+            }
+          </script>
         </div>
       </div>
       <div class="item">
@@ -94,10 +106,6 @@
         ¡Bienvenido!
         <p>Agregue su primer contacto <a href="new-contact.html">aquí</a></p>
       </div>
-      <!-- <div class="content">
-        <div class="description">
-        </div>
-      </div> -->
     </div>
     <script type="text/javascript">
       $(function() {
@@ -127,6 +135,19 @@
 
       function refreshContacts() {
         var contacts = listContacts();
+
+        if (categoryFilter !== null)
+        {
+          filteredContacts = {};
+
+          Object.keys(contacts).map(function(contact) {
+            if (contacts[contact].categories.split(',').includes(categoryFilter))
+              filteredContacts[contact] = contacts[contact];
+          });
+
+          contacts = filteredContacts;
+        }
+
         $('#contact-list').html(renderContactList(contacts));
 
         if (Object.keys(contacts).length === 0)
