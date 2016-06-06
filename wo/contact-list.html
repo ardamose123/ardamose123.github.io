@@ -22,7 +22,7 @@
     </style>
     <script type="text/javascript">
       var categories = {};
-      var categoryFilter = null;
+      var categoryFilter = [];
 
       var cts = listContacts();
       Object.keys(cts).map(function(contact) {
@@ -42,7 +42,7 @@
       <div class="item">
         <div class="header">Categorías</div>
         <div class="menu">
-          <a class="item" onclick="categoryFilter=null; refreshContacts();">
+          <a class="item" id="no-category-filter-option" onclick="categoryFilter=[]; refreshContacts();">
             <div class="ui label">
               <script>document.write(Object.keys(cts).length);</script>
             </div>
@@ -51,7 +51,7 @@
           <script type="text/javascript">
             for (category in categories)
             {
-              document.write('<a class="item" onclick="categoryFilter=\'' + category + '\'; refreshContacts();"><div class="ui label">' + categories[category] + '</div>' + category + '</a>');
+              document.write('<a class="category-filter item" data-category="' + category + '" onclick="toggleCategoryFilter(\'' + category + '\');"><div class="ui label">' + categories[category] + '</div>' + category + '</a>');
             }
           </script>
         </div>
@@ -133,15 +133,50 @@
         return false;
       }
 
+      function toggleCategoryFilter(category)
+      {
+        var theTarget = $('a[data-category="' + category + '"]');
+
+        var idx = categoryFilter.indexOf(category);
+        if (idx === -1)
+        {
+          theTarget.addClass('active orange');
+          theTarget.children('.label').addClass('orange');
+          categoryFilter.push(category);
+        }
+        else
+        {
+          theTarget.removeClass('active orange');
+          theTarget.children('.label').removeClass('orange');
+          categoryFilter.splice(idx, 1);
+        }
+
+        refreshContacts();
+      }
+
       function refreshContacts() {
+        if (categoryFilter.length === 0)
+        {
+          $('#no-category-filter-option').addClass('active orange');
+          $('#no-category-filter-option .label').addClass('orange');
+          $('a.category-filter.item').removeClass('active orange');
+          $('a.category-filter.item .label').removeClass('orange');
+        }
+        else
+        {
+          $('#no-category-filter-option').removeClass('active orange');
+          $('#no-category-filter-option .label').removeClass('orange');
+        }
+
         var contacts = listContacts();
 
-        if (categoryFilter !== null)
+        console.log(categoryFilter);
+        if (categoryFilter.length !== 0)
         {
-          filteredContacts = {};
+          var filteredContacts = {};
 
           Object.keys(contacts).map(function(contact) {
-            if (contacts[contact].categories.split(',').includes(categoryFilter))
+            if (contacts[contact].categories.split(',').some(function(category) { return categoryFilter.includes(category); }))
               filteredContacts[contact] = contacts[contact];
           });
 
